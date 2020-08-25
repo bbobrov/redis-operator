@@ -194,7 +194,7 @@ func (r *RedisFailoverChecker) GetRedisesIPs(rf *redisfailoverv1.RedisFailover) 
 		return nil, err
 	}
 	for _, rp := range rps.Items {
-		if rp.Status.Phase == corev1.PodRunning { // Only work with running pods
+		if rp.Status.Phase == corev1.PodRunning && rp.DeletionTimestamp == nil { // Only work with running pods
 			redises = append(redises, rp.Status.PodIP)
 		}
 	}
@@ -209,7 +209,7 @@ func (r *RedisFailoverChecker) GetSentinelsIPs(rf *redisfailoverv1.RedisFailover
 		return nil, err
 	}
 	for _, sp := range rps.Items {
-		if sp.Status.Phase == corev1.PodRunning { // Only work with running pods
+		if sp.Status.Phase == corev1.PodRunning && sp.DeletionTimestamp == nil { // Only work with running pods
 			sentinels = append(sentinels, sp.Status.PodIP)
 		}
 	}
@@ -251,7 +251,7 @@ func (r *RedisFailoverChecker) GetRedisesSlavesPods(rf *redisfailoverv1.RedisFai
 	}
 
 	for _, rp := range rps.Items {
-		if rp.Status.Phase == corev1.PodRunning { // Only work with running
+		if rp.Status.Phase == corev1.PodRunning && rp.DeletionTimestamp == nil { // Only work with running
 			master, err := r.redisClient.IsMaster(rp.Status.PodIP, password)
 			if err != nil {
 				return []string{}, err
@@ -277,7 +277,7 @@ func (r *RedisFailoverChecker) GetRedisesMasterPod(rFailover *redisfailoverv1.Re
 	}
 
 	for _, rp := range rps.Items {
-		if rp.Status.Phase == corev1.PodRunning { // Only work with running
+		if rp.Status.Phase == corev1.PodRunning && rp.DeletionTimestamp == nil { // Only work with running
 			master, err := r.redisClient.IsMaster(rp.Status.PodIP, password)
 			if err != nil {
 				return "", err
