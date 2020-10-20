@@ -1,5 +1,5 @@
-image: quay.io/spotahome/redis-operator
-tag: latest
+image: registry.suse.de/home/bbobrov/registry/containers/harbor/harbor-redis-operator
+tag: 1.0.0
 pullPolicy: Always
 containerName: redisoperator
 podAnnotations: {}
